@@ -59,18 +59,20 @@ export const actions = {
         
         if (event) {
             commit('SET_EVENT', event);
+            return event;
         } else {
-        EventService.getEvent(id)
-            .then(response => {
-                commit('SET_EVENT', response.data);
-            })
-            .catch(error => {
-                const notification = {
-                    type: 'error',
-                    message: 'There was a problem fetching event : ' + error.message
-                };
-                dispatch('notification/add', notification, { root: true });
-            });
+            return EventService.getEvent(id)
+                .then(response => {
+                    commit('SET_EVENT', response.data);
+                    return response.data;
+                })
+                .catch(error => {
+                    const notification = {
+                        type: 'error',
+                        message: 'There was a problem fetching event : ' + error.message
+                    };
+                    dispatch('notification/add', notification, { root: true });
+                });
         }
     }
 };
